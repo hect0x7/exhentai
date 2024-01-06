@@ -1,0 +1,12 @@
+postman:
+  type: requests
+  meta_data:
+    proxies: system
+    headers: {
+      'authority': 'exhentai.org',
+      'accept': 'text/html,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+      'accept-language': 'en-US;q=0.8,en;q=0.7',
+      'referer': 'https://exhentai.org/',
+      'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    }

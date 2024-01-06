@@ -1,0 +1,35 @@
+client:
+  postman:
+    type: requests
+    meta_data:
+      proxies: system
+      headers: {
+        'authority': 'exhentai.org',
+        'accept': 'text/html,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'accept-language': 'en-US;q=0.8,en;q=0.7',
+        'referer': 'https://exhentai.org/',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      }
+
+cookies:
+  account1:
+    ipb_pass_hash: 1
+    ipb_member_id: 2
+    igneous: 3
+  account2:
+    ipb_pass_hash: 4
+    ipb_member_id: 5
+    igneous: 6
+
+
+download:
+  rule: Bd_Bid
+  base_dir: D:/exhentai/download
+
+  threading:
+    workers: 50
+
+  image:
+    suffix: null
+    check_exist: True

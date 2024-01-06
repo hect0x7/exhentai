@@ -1,0 +1,8 @@
+account1:
+  ipb_pass_hash: 1
+  ipb_member_id: 2
+  igneous: 3
+account2:
+  ipb_pass_hash: 4
+  ipb_member_id: 5
+  igneous: 6

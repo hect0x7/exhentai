@@ -1,0 +1,9 @@
+rule: Bd_Bid
+base_dir: D:/exhentai/download
+
+threading:
+  workers: 50
+
+image:
+  suffix: null
+  check_exist: True
