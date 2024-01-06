@@ -4,7 +4,6 @@ import math
 from .module import *
 
 
-
 class Entity:
     @classmethod
     def get_dirname(cls, obj, ref: str):

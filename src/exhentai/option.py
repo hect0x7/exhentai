@@ -99,6 +99,7 @@ class ExhentaiOption:
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def decide_img_download_plan(self,
                                  book: BookInfo,
+                                 index: int,
                                  hurl: str,
                                  furl: str,
                                  client: ExhentaiClient,
@@ -106,7 +107,7 @@ class ExhentaiOption:
         save_dir = self.dir_rule.decide_image_save_dir(book.baseInfo, book.pageInfo)
         url = furl
         save_path = os.path.join(save_dir,
-                                 common.of_file_name(url, trim_suffix=True) +
+                                 str(index) +
                                  (self.download.image.suffix or common.of_file_suffix(url)),
                                  )
         if self.download.image.check_exist and common.file_exists(save_path):
