@@ -9,15 +9,16 @@ from .entity import *
 
 
 class ExhentaiHtmlParser:
-    pattern_hashimg_url = re.compile('<img id="img" src="(.*hath.network[^"]*)"')
-    pattern_fullimg_url = re.compile('(https://exhentai.org/fullimg/[^"]*)')
+    pattern_hash_img_url = re.compile('<img id="img" src="(.*hath.network[^"]*)"')
+    pattern_full_img_url = re.compile('(https://exhentai.org/fullimg/[^"]*)')
+    EMPTY_FULL_IMG_URL = ''
 
     @classmethod
-    def parse_hash_full_img_url(cls, html: str) -> tuple[str, str]:
-        hashimg_url = ExceptionTool.require_match(html, cls.pattern_hashimg_url)
-        fullimg_url = ExceptionTool.require_match(html, cls.pattern_fullimg_url)
+    def parse_hash_full_img_url(cls, html: str, url=None) -> tuple[str, str]:
+        hash_url = ExceptionTool.require_match(html, cls.pattern_hash_img_url, url=url)
+        full_url = ExceptionTool.match_or_default(html, cls.pattern_full_img_url, cls.EMPTY_FULL_IMG_URL)
 
-        return hashimg_url, fullimg_url
+        return hash_url, full_url
 
     # noinspection DuplicatedCode
     # code are base on https://github.com/tonquer/ehentai-qt
@@ -117,9 +118,11 @@ class ExceptionTool:
         return default if match is None else match[1]
 
     @classmethod
-    def require_match(cls, html: str, pattern: re.Pattern, rindex=1):
+    def require_match(cls, html: str, pattern: re.Pattern, *, url=None, rindex=1):
         match = pattern.search(html)
-        ExceptionTool.require_true(match is not None, f'pattern {pattern} not match: [{html}]')
+        ExceptionTool.require_true(match is not None,
+                                   (f"[{url}] " if url is not None else "") +
+                                   f'pattern {pattern} not match: [{html}]')
 
         if match is not None:
             return match[rindex] if rindex is not None else match

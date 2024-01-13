@@ -43,7 +43,7 @@ class ExhantaiDownloader:
 
     def download_pic(self, index: str, pic_url: str, book: BookInfo):
         resp = self.client.fetch_pic_page(pic_url)
-        hurl, furl = ExhentaiHtmlParser.parse_hash_full_img_url(resp.text)
+        hurl, furl = ExhentaiHtmlParser.parse_hash_full_img_url(resp.text, pic_url)
         durl, path = self.option.decide_img_download_plan(book, int(index), hurl, furl, self.client)
         if durl is None:
             return

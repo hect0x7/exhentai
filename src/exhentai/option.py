@@ -105,10 +105,14 @@ class ExhentaiOption:
                                  client: ExhentaiClient,
                                  ) -> tuple[str | None, str | None]:
         save_dir = self.dir_rule.decide_image_save_dir(book.baseInfo, book.pageInfo)
-        url = furl
+        if furl is ExhentaiHtmlParser.EMPTY_FULL_IMG_URL:
+            url_to_use = hurl
+        else:
+            url_to_use = furl if self.download.download_full_img else hurl
+
         save_path = os.path.join(save_dir,
                                  str(index) +
-                                 (self.download.image.suffix or common.of_file_suffix(url)),
+                                 (self.download.image.suffix or common.of_file_suffix(furl)),
                                  )
         if self.download.image.check_exist and common.file_exists(save_path):
             return None, None
