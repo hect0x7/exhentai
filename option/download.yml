@@ -7,3 +7,5 @@ threading:
 image:
   suffix: null
   check_exist: True
+
+download_full_img: false

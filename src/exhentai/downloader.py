@@ -1,4 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, Future
 
 from .option import *
 
@@ -10,7 +10,8 @@ class ExhantaiDownloader:
                  ):
         self.option = option
         self.client = client
-        self.workers = ThreadPoolExecutor(max_workers=self.option.decide_download_image_workers())
+        self.workers = ThreadPoolExecutor()
+        self.download_workers = ThreadPoolExecutor(max_workers=self.option.decide_download_image_workers())
 
     def download_gallery(self, gid: str, token: str, ):
         pic_url_dict: dict[str, str] = {}
@@ -25,21 +26,24 @@ class ExhantaiDownloader:
         #     book = self.client.fetch_gallery_page(gid, token, p)
         #     pic_url_dict.update(book.pic_url_dict)
 
+        image_futures: list[Future] = []
+
+        def run(p):
+            pic_url = self.client.fetch_gallery_page(gid, token, p).pageInfo.picUrl
+            pic_url_dict.update(pic_url)
+
+            for index, pic_url in pic_url_dict.items():
+                f = self.download_workers.submit(self.download_pic, index, pic_url, book)
+                image_futures.append(f)
+
         self.run_all(
             iterables=range(1, book.page_count),
-            apply=lambda p: pic_url_dict.update(self.client.fetch_gallery_page(gid, token, p).pageInfo.picUrl),
+            apply=run,
+            wait=True,
         )
 
-        # to sorted list
-        # sorted(list(pic_url_dict), key=lambda url: int(url[url.index('-'):]), reverse=True)
-
-        # for pic_url in pic_url_dict:
-        #     self.download_pic(pic_url, book)
-
-        self.run_all(
-            iterables=pic_url_dict.items(),
-            apply=lambda index, pic_url: self.download_pic(index, pic_url, book),
-        )
+        for f in image_futures:
+            f.result()
 
     def download_pic(self, index: str, pic_url: str, book: BookInfo):
         resp = self.client.fetch_pic_page(pic_url)
@@ -51,7 +55,7 @@ class ExhantaiDownloader:
         self.download_image(durl, path)
 
     def download_image(self, img_url: str, path: str):
-        self.workers.submit(self.client.download_image, img_url, path)
+        self.client.download_image(img_url, path)
 
     def run_all(self, iterables, apply, wait=True):
         future_list = []

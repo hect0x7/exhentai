@@ -23,12 +23,17 @@ class ExhentaiOption:
         self.dir_rule = DirRule(rule=self.download.rule, base_dir=self.download.base_dir)
 
     def new_client(self, group=None):
-        postman = Postmans.create(data=self.client['postman'])
+        postman = self.create_postman()
 
         if group is None:
             return ExhentaiClient(postman, list(self.cookies.values()))
         else:
             return ExhentaiClient(postman, [self.cookies[group]])
+
+    def create_postman(self):
+        postman = Postmans.create(data=self.client['postman'])
+        postman = postman.with_retry(7, clazz=RetryProxy)
+        return postman
 
     def copy_cookies(self, group):
         cookies: dict = self.cookies[group]
@@ -115,6 +120,7 @@ class ExhentaiOption:
                                  (self.download.image.suffix or common.of_file_suffix(furl)),
                                  )
         if self.download.image.check_exist and common.file_exists(save_path):
+            # log('image.skip', f'[{save_path}] -> {url_to_use}')
             return None, None
 
         return hurl, os.path.abspath(save_path)
