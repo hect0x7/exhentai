@@ -110,6 +110,8 @@ class ExhentaiOption:
                                  client: ExhentaiClient,
                                  ) -> tuple[str | None, str | None]:
         save_dir = self.dir_rule.decide_image_save_dir(book.baseInfo, book.pageInfo)
+        common.mkdir_if_not_exists(save_dir)
+
         if furl is ExhentaiHtmlParser.EMPTY_FULL_IMG_URL:
             url_to_use = hurl
         else:
