@@ -10,8 +10,8 @@ class ExhantaiDownloader:
                  ):
         self.option = option
         self.client = client
-        self.workers = ThreadPoolExecutor()
-        self.download_workers = ThreadPoolExecutor(max_workers=self.option.decide_download_image_workers())
+        self.page_workers = ThreadPoolExecutor(max_workers=self.option.decide_download_page_workers())
+        self.image_workers = ThreadPoolExecutor(max_workers=self.option.decide_download_image_workers())
 
     def download_gallery(self, gid: str, token: str, ):
         pic_url_dict: dict[str, str] = {}
@@ -33,7 +33,7 @@ class ExhantaiDownloader:
             pic_url_dict.update(pic_url)
 
             for index, pic_url in pic_url_dict.items():
-                f = self.download_workers.submit(self.download_pic, index, pic_url, book)
+                f = self.image_workers.submit(self.download_pic, index, pic_url, book)
                 image_futures.append(f)
 
         self.run_all(
@@ -62,7 +62,7 @@ class ExhantaiDownloader:
 
         for obj in iterables:
             args, kwargs = common.process_single_arg_to_args_and_kwargs(obj)
-            f = self.workers.submit(apply, *args, **kwargs)
+            f = self.page_workers.submit(apply, *args, **kwargs)
             future_list.append(f)
 
         if wait is True:

@@ -1,11 +1,21 @@
+# configure download behavior
+
+# download location dir DSL (see exhentai.toolkit.DirRule)
 rule: Bd_Bid
 base_dir: D:/exhentai/download
 
 threading:
-  workers: 50
+  # number of workers to request page. one page contains 20 images in exhentai
+  page: 50
+
+  # number of workers to download images
+  images: 50
 
 image:
+  # if not null, will convert image to this suffix
   suffix: null
+  # check whether target file exists in disk. if exists, skip downloading
   check_exist: True
 
+# download the full version or not
 download_full_img: false

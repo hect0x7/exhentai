@@ -1,7 +1,9 @@
+# for each configuration, see separated file (such as client.yml) for explanation docs
+
 client:
   postman:
     type: requests
-    meta_data:
+    metadata:
       proxies: system
       headers: {
         'authority': 'exhentai.org',

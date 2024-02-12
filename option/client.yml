@@ -1,6 +1,10 @@
+# configure client behavior
+
+retry_times: 10
 postman:
   type: requests
-  meta_data:
+  metadata:
+    timeout: 30
     proxies: system
     headers: {
       'authority': 'exhentai.org',

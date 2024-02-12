@@ -1,3 +1,6 @@
+# configure cookies group here
+
+# cookies below will be used randomly in the request by default (see exhentai.client.ExhentaiClient.choose_cookies)
 account1:
   ipb_pass_hash: 1
   ipb_member_id: 2

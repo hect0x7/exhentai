@@ -32,7 +32,7 @@ class ExhentaiOption:
 
     def create_postman(self):
         postman = Postmans.create(data=self.client['postman'])
-        postman = postman.with_retry(7, clazz=RetryProxy)
+        postman = postman.with_retry(self.client['retry_times'], clazz=RetryProxy)
         return postman
 
     def copy_cookies(self, group):
@@ -128,4 +128,7 @@ class ExhentaiOption:
         return hurl, os.path.abspath(save_path)
 
     def decide_download_image_workers(self) -> int:
-        return self.download.threading.workers
+        return self.download.threading.image
+
+    def decide_download_page_workers(self) -> int:
+        return self.download.threading.page
